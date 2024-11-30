@@ -21,28 +21,26 @@ export async function GET(request, { params }){
     })
   }
 
-  const image = await sharp({
-    create: {
-      width: width,
-      height: height,
-      channels: 4,
-      background: { r: 200, g: 200, b: 200, alpha: 1 }
-    }
-  }).composite([{
-    input: Buffer.from(
-      `<svg width="${width}" height="${height}">
-        <rect x="0" y="0" width="${width}" height="${height}" fill="#e2e8f0"/>
-        <text x="50%" y="50%" font-family="Arial" font-size="16" 
-              fill="#64748b" text-anchor="middle" dominant-baseline="middle">
+  const svgString = `
+      <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100%" height="100%" fill="#e2e8f0"/>
+        <text 
+          x="50%" 
+          y="50%" 
+          font-family="Arial" 
+          font-size="16"
+          fill="#64748b" 
+          text-anchor="middle" 
+          dominant-baseline="middle"
+        >
           ${width} x ${height}
         </text>
-      </svg>`
-    ),
-    top: 0,
-    left: 0,
-  }])
-  .png()
-  .toBuffer();
+      </svg>`;
+
+    
+    const image = await sharp(Buffer.from(svgString))
+      .png()
+      .toBuffer();
   
   
   return new Response(image, {
