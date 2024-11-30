@@ -28,23 +28,12 @@ export async function GET(request, { params }){
       channels: 4,
       background: { r: 200, g: 200, b: 200, alpha: 1 }
     }
-  }).composite([
-    {
-      input: {
-        text: {
-          text: `${width} x ${height}\nhttp.pm/img`,
-          rgba: true,
-          align: 'center'
-        }
-      },
-      gravity: 'center'
-    }
-  ])
+  })
   .png()
   .toBuffer();
   
   
-  return new Response(image, {
+  return new NextResponse(image, {
     headers: {
       'Content-Type': 'image/png',
       'Cache-Control': 'public, max-age=31536000, immutable'
