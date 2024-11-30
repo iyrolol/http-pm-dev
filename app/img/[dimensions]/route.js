@@ -1,5 +1,5 @@
 // app/api/image/[dimensions]/route.ts
-import { NextResponse } from 'next/server';
+
 import sharp from 'sharp';
 
 export async function GET(request, { params }){
@@ -21,26 +21,28 @@ export async function GET(request, { params }){
     })
   }
 
-  const svgString = `
-      <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
-        <rect width="100%" height="100%" fill="#e2e8f0"/>
-        <text 
-          x="50%" 
-          y="50%" 
-          font-family="Arial" 
-          font-size="16"
-          fill="#64748b" 
-          text-anchor="middle" 
-          dominant-baseline="middle"
-        >
-          ${width} x ${height}
-        </text>
-      </svg>`;
-
-    
-    const image = await sharp(Buffer.from(svgString))
-      .png()
-      .toBuffer();
+  const image = await sharp({
+    create: {
+      width: width,
+      height: height,
+      channels: 4,
+      background: { r: 200, g: 200, b: 200, alpha: 1 }
+    }
+  }).composite([
+    {
+      input: {
+        text: {
+          text: `${width} x ${height}\nhttp.pm/img`,
+          rgba: true,
+          font: 'sans',
+          align: 'center'
+        }
+      },
+      gravity: 'center'
+    }
+  ])
+  .png()
+  .toBuffer();
   
   
   return new Response(image, {
@@ -51,6 +53,6 @@ export async function GET(request, { params }){
   })
 } catch (error) {
   console.error('Error generating image:', error);
-  return new NextResponse('Error generating image', { status: 500 });
+  return new Response('Error generating image', { status: 500 });
 }
 }
