@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { ArrowLeft } from 'lucide-react'
+import { tailwindColors } from "@/data/colors"
 
 export default function ImageDocs() {
   return (
@@ -42,6 +43,27 @@ export default function ImageDocs() {
             <li><code className="bg-gray-100 px-2 py-1 rounded">http.pm/img/800x600</code> - Returns an 800x600 placeholder image</li>
             <li><code className="bg-gray-100 px-2 py-1 rounded">http.pm/img/1920x1080</code> - Returns a 1920x1080 placeholder image</li>
           </ul>
+
+          <p className="text-lg">Examples:</p>
+          <ul className="list-disc list-inside space-y-2 text-lg">
+            <li><code className="bg-gray-100 px-2 py-1 rounded">http.pm/img/300x200</code> - Returns a 300x200 placeholder image with default color</li>
+            <li><code className="bg-gray-100 px-2 py-1 rounded">http.pm/img/800x600/0,0,255</code> - Returns an 800x600 blue placeholder image</li>
+            <li><code className="bg-gray-100 px-2 py-1 rounded">http.pm/img/1920x1080/211,211,211</code> - Returns a 1920x1080 light gray placeholder image</li>
+          </ul>
+
+          <div className="mt-8">
+            <h2 className="text-2xl font-bold mb-4">Available Colors</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {Object.entries(tailwindColors).map(([colorName, rgbCode]) => (
+                <div key={colorName} className="flex items-center space-x-2">
+                  <div 
+                    className={'w-6 h-6 rounded-full ' + rgbCode.bg}
+                  ></div>
+                  <span>{colorName + rgbCode.bg}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </main>

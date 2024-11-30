@@ -1,6 +1,5 @@
-// app/api/image/[dimensions]/route.ts
+import createSVG from '@/utils/createSVG';
 import { NextResponse } from 'next/server';
-import sharp from 'sharp';
 
 export async function GET(request, { params }){
   try {
@@ -21,17 +20,7 @@ export async function GET(request, { params }){
     })
   }
 
-  const image = await sharp({
-    create: {
-      width: width,
-      height: height,
-      channels: 4,
-      background: { r: 200, g: 200, b: 200, alpha: 1 }
-    }
-  })
-  .png()
-  .toBuffer();
-  
+  const image = await createSVG(width, height)
   
   return new NextResponse(image, {
     headers: {
