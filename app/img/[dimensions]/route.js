@@ -1,5 +1,5 @@
 // app/api/image/[dimensions]/route.ts
-
+import { NextResponse } from 'next/server';
 import sharp from 'sharp';
 
 export async function GET(request, { params }){
@@ -34,7 +34,6 @@ export async function GET(request, { params }){
         text: {
           text: `${width} x ${height}\nhttp.pm/img`,
           rgba: true,
-          font: 'sans',
           align: 'center'
         }
       },
@@ -53,6 +52,6 @@ export async function GET(request, { params }){
   })
 } catch (error) {
   console.error('Error generating image:', error);
-  return new Response('Error generating image', { status: 500 });
+  return new NextResponse('Error generating image', { status: 500 });
 }
 }
